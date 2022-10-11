@@ -35,6 +35,16 @@ public class User {
    */
   private String personID;
 
+  /**
+   * Initializes member variables for the user model object
+   * @param username username for the user
+   * @param password password for the user
+   * @param email users email
+   * @param firstName first name of the user
+   * @param lastName last name of the user
+   * @param gender gender of user, either "m" or "f"
+   * @param personID the person ID for associated person object
+   */
   public User(String username, String password, String email, String firstName, String lastName, String gender, String personID) {
     this.username=username;
     this.password=password;

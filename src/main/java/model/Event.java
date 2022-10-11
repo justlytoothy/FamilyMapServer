@@ -43,6 +43,18 @@ public class Event {
      */
     private int year;
 
+    /**
+     * Initializes the event model object
+     * @param eventID the ID of the event
+     * @param username username of user associated with event
+     * @param personID ID of person associated with event
+     * @param latitude the latitude of event location
+     * @param longitude the longitude of event location
+     * @param country the country of event location
+     * @param city the city of event location
+     * @param eventType the event type
+     * @param year the year
+     */
     public Event(String eventID, String username, String personID, Float latitude, Float longitude,
                  String country, String city, String eventType, int year) {
         this.eventID = eventID;

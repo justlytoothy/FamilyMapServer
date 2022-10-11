@@ -1,6 +1,7 @@
 package dao;
 
 import model.Event;
+import model.User;
 
 import java.sql.*;
 
@@ -92,5 +93,15 @@ public class EventDAO {
             e.printStackTrace();
             throw new DataAccessException("Error encountered while clearing the event table");
         }
+    }
+
+    /**
+     * Gets the user associated with the event identified by provided event ID
+     * @param eventID the ID associated with the event
+     * @return the user object found or null
+     * @throws DataAccessException if unable to access data
+     */
+    public User getUser(String eventID) throws DataAccessException {
+        return null;
     }
 }

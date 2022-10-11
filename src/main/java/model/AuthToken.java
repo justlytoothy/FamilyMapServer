@@ -6,10 +6,20 @@ import java.util.Objects;
  * The data access object for authorization token table
  */
 public class AuthToken {
+  /**
+   * A string containing the authorization token
+   */
   private String authtoken;
+  /**
+   * The username associated with the auth token
+   */
   private String username;
 
-
+  /**
+   * Initializes the authtoken and username
+   * @param authtoken the auth token
+   * @param username the username
+   */
   public AuthToken(String authtoken, String username) {
     this.authtoken = authtoken;
     this.username = username;

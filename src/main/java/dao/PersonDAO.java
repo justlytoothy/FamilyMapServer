@@ -1,6 +1,7 @@
 package dao;
 
 import model.Person;
+import model.Event;
 
 import java.sql.*;
 
@@ -39,6 +40,25 @@ public class PersonDAO {
    * @throws DataAccessException
    */
   public void clear() throws DataAccessException {}
+
+  /**
+   * Finds all the family members of the provided person object
+   * @param person the person object on which to find family
+   * @return an array holding person objects of the family members or empty array
+   * @throws DataAccessException if unable to access data
+   */
+  public Person[] findFamily(Person person) throws DataAccessException {
+    return null;
+  }
+  /**
+   * Finds all the events associated with the provided person object
+   * @param person the person object on which to find events
+   * @return an array holding event objects or empty array
+   * @throws DataAccessException if unable to access data
+   */
+  public Event[] findEvents(Person person) throws DataAccessException {
+    return null;
+  }
 
 
 }

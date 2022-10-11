@@ -5,11 +5,20 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+/**
+ * The database connection class
+ */
 public class Database {
     private Connection conn;
 
     // Whenever we want to make a change to our database we will have to open a connection and use
     // Statements created by that connection to initiate transactions
+
+    /**
+     * Opens the connection to the database
+     * @return the new connection
+     * @throws DataAccessException if unable to connect
+     */
     public Connection openConnection() throws DataAccessException {
         try {
             // The Structure for this Connection is driver:language:path
@@ -29,6 +38,11 @@ public class Database {
         return conn;
     }
 
+    /**
+     * Either returns the current connection or opens new based on whether connection is open or closed
+     * @return current connection or new one
+     * @throws DataAccessException if unable to open connection
+     */
     public Connection getConnection() throws DataAccessException {
         if (conn == null) {
             return openConnection();
@@ -44,6 +58,11 @@ public class Database {
     // IMPORTANT: IF YOU FAIL TO CLOSE A CONNECTION AND TRY TO REOPEN THE DATABASE THIS WILL CAUSE THE
     // DATABASE TO LOCK. YOUR CODE MUST ALWAYS CLOSE THE DATABASE NO MATTER WHAT ERRORS
     // OR PROBLEMS ARE ENCOUNTERED
+
+    /**
+     * Closes the current connection
+     * @param commit whether we need to commit or rollback current changes
+     */
     public void closeConnection(boolean commit) {
         try {
             if (commit) {

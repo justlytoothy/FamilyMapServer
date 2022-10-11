@@ -38,6 +38,17 @@ public class Person {
    */
   private String spouseID;
 
+  /**
+   * Initializes the member variables for the person object
+   * @param username associated username for the person
+   * @param personID the ID
+   * @param firstName first name of the person
+   * @param lastName last name of the person
+   * @param gender gender, either "m" or "f"
+   * @param fatherID either null or the associated father person ID
+   * @param motherID either null or the associated mother person ID
+   * @param spouseID either null or the associated spouse person ID
+   */
   public Person(String username, String personID, String firstName, String lastName,
                String gender, String fatherID, String motherID, String spouseID) {
     this.personID = personID;
