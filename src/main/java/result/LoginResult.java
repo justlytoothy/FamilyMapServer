@@ -1,7 +1,7 @@
 package result;
 
 /**
- * Returns the results of the login request to the user
+ * Contains the results of the login request to the user
  */
 public class LoginResult {
   /**
@@ -47,5 +47,45 @@ public class LoginResult {
     this.personID = personID;
     this.success = success;
     this.message = null;
+  }
+
+  public String getAuthToken() {
+    return authtoken;
+  }
+
+  public void setAuthToken(String authtoken) {
+    this.authtoken = authtoken;
+  }
+
+  public String getUsername() {
+    return username;
+  }
+
+  public void setUsername(String username) {
+    this.username = username;
+  }
+
+  public String getPersonID() {
+    return personID;
+  }
+
+  public void setPersonID(String personID) {
+    this.personID = personID;
+  }
+
+  public String getMessage() {
+    return message;
+  }
+
+  public void setMessage(String message) {
+    this.message = message;
+  }
+
+  public boolean isSuccess() {
+    return success;
+  }
+
+  public void setSuccess(boolean success) {
+    this.success = success;
   }
 }

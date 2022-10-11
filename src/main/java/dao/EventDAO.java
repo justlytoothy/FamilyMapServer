@@ -8,16 +8,22 @@ import java.sql.*;
  * The data access object for the event table
  */
 public class EventDAO {
+    /**
+     * The database connection
+     */
     private final Connection conn;
-
+    /**
+     * Initialize database connection
+     * @param conn a new connection
+     */
     public EventDAO(Connection conn) {
         this.conn = conn;
     }
 
     /**
-     * Takes in an object of event class and inserts all of the fields into a new row in the table
+     * Takes in an object of event class and inserts all the fields into a new row in the table
      * @param event the event to be added
-     * @throws DataAccessException
+     * @throws DataAccessException if unable to access data
      */
     public void insert(Event event) throws DataAccessException {
         //We can structure our string to be similar to a sql command, but if we insert question

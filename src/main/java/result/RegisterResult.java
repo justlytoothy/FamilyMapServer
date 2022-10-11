@@ -1,9 +1,7 @@
 package result;
 
-import request.RegisterRequest;
-
 /**
- * Returns the results of the register request to the user
+ * Contains the results of the register request to the user
  */
 public class RegisterResult {
   /**
@@ -31,6 +29,7 @@ public class RegisterResult {
    * The constructor for use when the request has failed
    * @param message the error message generated
    * @param success the failure of the request as a boolean
+   * @exception
    */
   public RegisterResult(String message, boolean success) {
     this.message = message;
@@ -50,5 +49,45 @@ public class RegisterResult {
     this.personID = personID;
     this.success = success;
     this.message = null;
+  }
+
+  public String getAuthtoken() {
+    return authtoken;
+  }
+
+  public void setAuthtoken(String authtoken) {
+    this.authtoken = authtoken;
+  }
+
+  public String getUsername() {
+    return username;
+  }
+
+  public void setUsername(String username) {
+    this.username = username;
+  }
+
+  public String getPersonID() {
+    return personID;
+  }
+
+  public void setPersonID(String personID) {
+    this.personID = personID;
+  }
+
+  public String getMessage() {
+    return message;
+  }
+
+  public void setMessage(String message) {
+    this.message = message;
+  }
+
+  public boolean isSuccess() {
+    return success;
+  }
+
+  public void setSuccess(boolean success) {
+    this.success = success;
   }
 }

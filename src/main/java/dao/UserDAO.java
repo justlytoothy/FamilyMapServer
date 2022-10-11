@@ -1,17 +1,21 @@
 package dao;
-import model.Event;
 import model.User;
 
-import java.sql.Connection;
+import java.sql.*;
 
 /**
  * The data access object for the user table
  */
 public class UserDAO {
+  /**
+   * The database connection
+   */
   private final Connection conn;
-
-
-  public UserDAO (Connection conn) {
+  /**
+   * Initialize database connection
+   * @param conn a new connection
+   */
+  public UserDAO(Connection conn) {
     this.conn = conn;
   }
 

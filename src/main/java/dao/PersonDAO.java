@@ -2,10 +2,23 @@ package dao;
 
 import model.Person;
 
+import java.sql.*;
+
 /**
  * The data access object for the person table
  */
 public class PersonDAO {
+  /**
+   * The database connection
+   */
+  private final Connection conn;
+  /**
+   * Initialize database connection
+   * @param conn a new connection
+   */
+  public PersonDAO(Connection conn) {
+    this.conn = conn;
+  }
   /**
    * Takes in an object of person class and inserts all of the fields into a new row in the table
    * @param person the person to be added

@@ -5,18 +5,46 @@ import java.util.Objects;
  * The data access object for the event table
  */
 public class Event {
+    /**
+     * The specific ID tied to the event
+     */
     private String eventID;
+
+    /**
+     * The username of the user that the event is associated with
+     */
     private String associatedUsername;
+    /**
+     * The ID of the person that the event is associated with
+     */
     private String personID;
+    /**
+     * A float representing the latitude of the event
+     */
     private Float latitude;
+    /**
+     * A float representing the longitude of the event
+     */
     private Float longitude;
+    /**
+     * A string representing the country where the event occurred
+     */
     private String country;
+    /**
+     * A string representing the city where the event occurred
+     */
     private String city;
+    /**
+     * A string representing the type of the event
+     */
     private String eventType;
-    private Integer year;
+    /**
+     * An integer representing the country where the event occurred
+     */
+    private int year;
 
     public Event(String eventID, String username, String personID, Float latitude, Float longitude,
-                 String country, String city, String eventType, Integer year) {
+                 String country, String city, String eventType, int year) {
         this.eventID = eventID;
         this.associatedUsername = username;
         this.personID = personID;
@@ -92,11 +120,11 @@ public class Event {
         this.eventType = eventType;
     }
 
-    public Integer getYear() {
+    public int getYear() {
         return year;
     }
 
-    public void setYear(Integer year) {
+    public void setYear(int year) {
         this.year = year;
     }
     /**

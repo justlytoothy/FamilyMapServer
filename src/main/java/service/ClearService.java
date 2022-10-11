@@ -3,15 +3,14 @@ package service;
 import result.ClearResult;
 
 /**
- * Links the clear request and result together
+ * Performs clear operations and returns the results
  */
 public class ClearService {
   /**
-   * This method takes in a request to clear all data, gets the result and then sends back to the handler
-   * @param request the request sent from the user
-   * @return
+   * This method deletes all data from the database, including user, authtoken, person, and event data
+   * @return a response describing the success or failure of clearing the database
    */
-  public ClearResult clear (ClearRequest request) {
+  public ClearResult clear () {
     return null;
   }
 }

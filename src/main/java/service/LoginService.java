@@ -4,13 +4,13 @@ import request.LoginRequest;
 import result.LoginResult;
 
 /**
- * Links the login request and result together
+ * Performs login operations from requests and returns the results
  */
 public class LoginService {
   /**
-   * This method takes in a request to login a user, gets the result and then sends back to the handler
+   * This method logs in a user and generates an authorization token for them
    * @param request the request sent at login, containing the username and password
-   * @return
+   * @return the result of the login request
    */
   public LoginResult login(LoginRequest request) {
     return null;

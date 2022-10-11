@@ -1,13 +1,18 @@
 package dao;
 
 import model.AuthToken;
-import model.Person;
 
 import java.sql.*;
 
 public class AuthTokenDAO {
+  /**
+   * The database connection
+   */
   private final Connection conn;
-
+  /**
+   * Initialize database connection
+   * @param conn a new connection
+   */
   public AuthTokenDAO(Connection conn) {
     this.conn = conn;
   }
