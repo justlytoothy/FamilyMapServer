@@ -23,7 +23,7 @@ public class PersonDAO {
   /**
    * Takes in an object of person class and inserts all of the fields into a new row in the table
    * @param person the person to be added
-   * @throws DataAccessException
+   * @throws DataAccessException if unable to access data
    */
   public void insert(Person person) throws DataAccessException {}
 
@@ -31,7 +31,7 @@ public class PersonDAO {
    * Takes in a person ID and returns the matching row from the database
    * @param personID the ID of the person to be found
    * @return the found person
-   * @throws DataAccessException
+   * @throws DataAccessException if unable to access data
    */
   public Person find(String personID) throws DataAccessException {return null;}
 

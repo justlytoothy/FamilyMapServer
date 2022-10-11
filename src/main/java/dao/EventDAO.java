@@ -56,7 +56,7 @@ public class EventDAO {
      * Takes in an event ID and returns the matching row from the database
      * @param eventID the ID of the desired event
      * @return the found event or null if not found
-     * @throws DataAccessException
+     * @throws DataAccessException if unable to access data
      */
     public Event find(String eventID) throws DataAccessException {
         Event event;
@@ -83,7 +83,7 @@ public class EventDAO {
 
     /**
      * Clears all entries from the events table
-     * @throws DataAccessException
+     * @throws DataAccessException if unable to access data
      */
     public void clear() throws DataAccessException {
         String sql = "DELETE FROM Event";
