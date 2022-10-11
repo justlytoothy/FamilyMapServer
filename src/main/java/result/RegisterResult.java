@@ -29,7 +29,6 @@ public class RegisterResult {
    * The constructor for use when the request has failed
    * @param message the error message generated
    * @param success the failure of the request as a boolean
-   * @exception
    */
   public RegisterResult(String message, boolean success) {
     this.message = message;
