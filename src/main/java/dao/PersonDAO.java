@@ -2,6 +2,7 @@ package dao;
 
 import model.Person;
 import model.Event;
+import model.User;
 
 import java.sql.*;
 
@@ -25,7 +26,26 @@ public class PersonDAO {
    * @param person the person to be added
    * @throws DataAccessException if unable to access data
    */
-  public void insert(Person person) throws DataAccessException {}
+  public void insert(Person person) throws DataAccessException {
+    String sql = "INSERT INTO Person (personID, associatedUsername, firstName, lastName, fatherID, " +
+            "motherID, spouseID, gender) VALUES(?,?,?,?,?,?,?,?)";
+    try (PreparedStatement statement = conn.prepareStatement(sql)) {
+      statement.setString(1,person.getPersonID());
+      statement.setString(2,person.getAssociatedUsername());
+      statement.setString(3,person.getFirstName());
+      statement.setString(4,person.getLastName());
+      statement.setString(5,person.getFatherID());
+      statement.setString(6,person.getMotherID());
+      statement.setString(7,person.getSpouseID());
+      statement.setString(8,person.getGender());
+
+      statement.executeUpdate();
+    }
+    catch(SQLException e) {
+      e.printStackTrace();
+      throw new DataAccessException("Error encountered while inserting into the person table");
+    }
+  }
 
   /**
    * Takes in a person ID and returns the matching row from the database
@@ -33,13 +53,44 @@ public class PersonDAO {
    * @return the found person
    * @throws DataAccessException if unable to access data
    */
-  public Person find(String personID) throws DataAccessException {return null;}
+  public Person find(String personID) throws DataAccessException {
+    Person person;
+    ResultSet rs;
+    String sql = "SELECT * FROM Person WHERE personID = ?;";
+    try (PreparedStatement statement = conn.prepareStatement(sql)) {
+      statement.setString(1,personID);
+      rs = statement.executeQuery();
+      if (rs.next()) {
+        person = new Person(rs.getString("associatedUsername"),rs.getString("personID"),
+                rs.getString("firstName"),rs.getString("lastName"),
+                rs.getString("gender"), rs.getString("fatherID"),
+                rs.getString("motherID"), rs.getString("spouseID"));
+        return person;
+      }
+      else {
+        return null;
+      }
+    }
+    catch(SQLException e) {
+      e.printStackTrace();
+      throw new DataAccessException("Error encountered while finding person");
+    }
+  }
 
   /**
    * Clears all entries from the persons table
    * @throws DataAccessException
    */
-  public void clear() throws DataAccessException {}
+  public void clear() throws DataAccessException {
+    String sql = "DELETE FROM Person";
+    try (PreparedStatement statement = conn.prepareStatement(sql)) {
+      statement.executeUpdate();
+    }
+    catch(SQLException e) {
+      e.printStackTrace();
+      throw new DataAccessException("Error encountered while clearing the person table");
+    }
+  }
 
   /**
    * Finds all the family members of the provided person object

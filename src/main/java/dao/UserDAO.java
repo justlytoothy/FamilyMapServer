@@ -26,20 +26,68 @@ public class UserDAO {
    * @param user the new user to be added
    * @throws DataAccessException if unable to access data
    */
-  public void insert(User user) throws DataAccessException {}
+  public void insert(User user) throws DataAccessException {
+    String sql = "INSERT INTO User (username, password, email, firstName, lastName, " +
+            "gender, personID) VALUES(?,?,?,?,?,?,?)";
+    try (PreparedStatement statement = conn.prepareStatement(sql)) {
+      statement.setString(1,user.getUsername());
+      statement.setString(2,user.getPassword());
+      statement.setString(3,user.getEmail());
+      statement.setString(4,user.getFirstName());
+      statement.setString(5,user.getLastName());
+      statement.setString(6,user.getGender());
+      statement.setString(7,user.getPersonID());
+      statement.executeUpdate();
+    }
+    catch(SQLException e) {
+      e.printStackTrace();
+      throw new DataAccessException("Error encountered while inserting into the user table");
+    }
+  }
   /**
    * Takes in a username and returns the matching user from the database
    * @param username the username of the desired user
    * @return the found user
    * @throws DataAccessException if unable to access data
    */
-  public User findUser(String username) throws DataAccessException {return null;}
+  public User findUser(String username) throws DataAccessException {
+    User user;
+    ResultSet rs;
+    String sql = "SELECT * FROM User WHERE username = ?;";
+    try (PreparedStatement statement = conn.prepareStatement(sql)) {
+      statement.setString(1,username);
+      rs = statement.executeQuery();
+      if (rs.next()) {
+        user = new User(rs.getString("username"),rs.getString("password"),
+                rs.getString("email"),rs.getString("firstName"),
+                rs.getString("lastName"),rs.getString("gender"),
+                rs.getString("personID"));
+        return user;
+      }
+      else {
+        return null;
+      }
+    }
+    catch(SQLException e) {
+      e.printStackTrace();
+      throw new DataAccessException("Error encountered while finding user");
+    }
+  }
 
   /**
    * Clears all entries from the users table
    * @throws DataAccessException if unable to access data
    */
-  public void clear() throws DataAccessException {}
+  public void clear() throws DataAccessException {
+    String sql = "DELETE FROM User";
+    try (PreparedStatement statement = conn.prepareStatement(sql)) {
+      statement.executeUpdate();
+    }
+    catch(SQLException e) {
+      e.printStackTrace();
+      throw new DataAccessException("Error encountered while clearing the user table");
+    }
+  }
 
   /**
    * Finds the person associated with the given user
