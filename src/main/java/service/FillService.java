@@ -157,32 +157,32 @@ public class FillService {
     String birthID = database.genToken();
     Generator.Location birthLocation = generator.getRandomLocation();
     try {
-      Event birth=new Event(birthID, associatedUsername, personID, birthLocation.getLatitude(), birthLocation.getLongitude(),
+      Event birth = new Event(birthID, associatedUsername, personID, birthLocation.getLatitude(), birthLocation.getLongitude(),
               birthLocation.getCountry(), birthLocation.getCity(), "Birth", birthYear);
       eventDAO.insert(birth);
-      ++eventsAdded;
+      eventsAdded++;
 
 
-      String baptismID=database.genToken();
+      String baptismID = database.genToken();
       Generator.Location baptismLocation=generator.getRandomLocation();
       Event baptism=new Event(baptismID, associatedUsername, personID, baptismLocation.getLatitude(), baptismLocation.getLongitude(),
               baptismLocation.getCountry(), baptismLocation.getCity(), "Baptism", birthYear + 8);
       eventDAO.insert(baptism);
-      ++eventsAdded;
+      eventsAdded++;
 
-      String marriageID=database.genToken();
+      String marriageID = database.genToken();
       Event marriage = new Event(marriageID, associatedUsername, personID, marriageLocation.getLatitude(), marriageLocation.getLongitude(),
               marriageLocation.getCountry(), marriageLocation.getCity(), "Marriage", birthYear + 24);
       eventDAO.insert(marriage);
-      ++eventsAdded;
+      eventsAdded++;
 
-      if ((birthYear + 50) < CURRENT_YEAR) { // realistic death of user's mother required in tests so have deaeth sometime over 50 instead of 72...
-        String deathID=database.genToken();
+      if ((birthYear + 50) < CURRENT_YEAR) {
+        String deathID = database.genToken();
         Generator.Location deathLocation=generator.getRandomLocation();
-        Event death=new Event(deathID, associatedUsername, personID, deathLocation.getLatitude(), deathLocation.getLongitude(),
-                deathLocation.getCountry(), deathLocation.getCity(), "Death", birthYear + 50);
+        Event death = new Event(deathID, associatedUsername, personID, deathLocation.getLatitude(), deathLocation.getLongitude(),
+                deathLocation.getCountry(), deathLocation.getCity(), "Death", birthYear + 51);
         eventDAO.insert(death);
-        ++eventsAdded;
+        eventsAdded++;
       }
     }
     catch(DataAccessException e) {
