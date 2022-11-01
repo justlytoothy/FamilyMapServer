@@ -1,10 +1,7 @@
 import java.io.*;
 import java.net.*;
 import com.sun.net.httpserver.*;
-import handler.FileHandler;
-import handler.FillHandler;
-import handler.LoginHandler;
-import handler.RegisterHandler;
+import handler.*;
 
 /*
 	This example demonstrates the basic structure of the Family Map Server
@@ -94,6 +91,11 @@ public class Server {
     server.createContext("/user/register", new RegisterHandler());
     server.createContext("/user/login", new LoginHandler());
     server.createContext("/fill", new FillHandler());
+    server.createContext("/load", new LoadHandler());
+    server.createContext("/clear", new ClearHandler());
+    server.createContext("/person", new PersonHandler());
+    server.createContext("/event", new EventHandler());
+
 
 
 
@@ -118,7 +120,7 @@ public class Server {
   // "args" should contain one command-line argument, which is the port number
   // on which the server should accept incoming client connections.
   public static void main(String[] args) {
-    String portNumber = "80";
+    String portNumber = args[0];
     new Server().run(portNumber);
   }
 }

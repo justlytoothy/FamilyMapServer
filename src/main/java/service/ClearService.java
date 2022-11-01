@@ -1,6 +1,11 @@
 package service;
 
+import dao.DataAccessException;
+import dao.Database;
+import handler.ClearHandler;
 import result.ClearResult;
+
+import javax.xml.crypto.Data;
 
 /**
  * Performs clear operations and returns the results
@@ -11,6 +16,17 @@ public class ClearService {
    * @return a response describing the success or failure of clearing the database
    */
   public ClearResult clear () {
-    return null;
+    Database database = new Database();
+    ClearResult clearResult;
+    try {
+      database.clearDatabase();
+      database.closeConnection(true);
+      clearResult = new ClearResult("Clear succeeded.",true);
+      return clearResult;
+    }
+    catch(DataAccessException e) {
+      clearResult = new ClearResult("Error while clearing the database :(",false);
+      return clearResult;
+    }
   }
 }

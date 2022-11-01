@@ -8,10 +8,7 @@ import request.LoginRequest;
 import result.LoginResult;
 import service.LoginService;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.HttpURLConnection;
 
 
@@ -33,12 +30,8 @@ public class LoginHandler implements HttpHandler {
 
 
     try {
-      // Determine the HTTP request type (GET, POST, etc.).
-      // Only allow POST requests for this operation.
-      // This operation requires a POST request, because the
-      // client is "posting" information to the server for processing.
-      if (exchange.getRequestMethod().toLowerCase().equals("post")) {
 
+      if (exchange.getRequestMethod().toLowerCase().equals("post")) {
         // Get the HTTP request headers
         Headers reqHeaders = exchange.getRequestHeaders();
         // Check to see if an "Authorization" header is present
@@ -49,33 +42,22 @@ public class LoginHandler implements HttpHandler {
 
             // Get the request body input stream
             InputStream reqBody = exchange.getRequestBody();
-
-            // Read JSON string from the input stream
-            String reqData = readString(reqBody);
-
-            // Display/log the request JSON data
-            System.out.println(reqData);
-
-            // TODO: Claim a route based on the request data
-
+            String req = readString(reqBody);
             Gson gson = new Gson();
-            LoginRequest request = (LoginRequest)gson.fromJson(reqData, LoginRequest.class);
-
+            LoginRequest request = (LoginRequest)gson.fromJson(req, LoginRequest.class);
             LoginService service = new LoginService();
             LoginResult result = service.login(request);
-            exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
+            if (result.isSuccess()) {
+                exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
+            }
+            else {
+                exchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
+
+            }
             OutputStream resBody = exchange.getResponseBody();
-//            gson.toJson(result, resBody);
+            String res = gson.toJson(result);
+            writeString(res,resBody);
             System.out.println(gson.toJson(result));
-            resBody.close();
-
-
-            // Start sending the HTTP response to the client, starting with
-            // the status code and any defined headers.
-            exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
-
-            // We are not sending a response body, so close the response body
-            // output stream, indicating that the response is complete.
             exchange.getResponseBody().close();
 
 
@@ -86,16 +68,8 @@ public class LoginHandler implements HttpHandler {
       }
     }
     catch (IOException e) {
-      // Some kind of internal error has occurred inside the server (not the
-      // client's fault), so we return an "internal server error" status code
-      // to the client.
       exchange.sendResponseHeaders(HttpURLConnection.HTTP_SERVER_ERROR, 0);
-
-      // We are not sending a response body, so close the response body
-      // output stream, indicating that the response is complete.
       exchange.getResponseBody().close();
-
-      // Display/log the stack trace
       e.printStackTrace();
     }
   }
@@ -113,4 +87,9 @@ public class LoginHandler implements HttpHandler {
     }
     return sb.toString();
   }
+    private void writeString(String res, OutputStream output) throws IOException {
+        OutputStreamWriter write = new OutputStreamWriter(output);
+        write.write(res);
+        write.flush();
+    }
 }

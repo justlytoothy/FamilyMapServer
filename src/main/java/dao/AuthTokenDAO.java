@@ -28,8 +28,8 @@ public class AuthTokenDAO {
   public void insert(AuthToken token) throws DataAccessException {
     String sql = "INSERT INTO AuthToken (authtoken, username) VALUES(?,?)";
     try (PreparedStatement statement = conn.prepareStatement(sql)) {
-      statement.setString(1, token.getUsername());
-      statement.setString(2, token.getAuthToken());
+      statement.setString(1, token.getAuthToken());
+      statement.setString(2, token.getUsername());
       statement.executeUpdate();
     }
     catch(SQLException e) {
@@ -52,7 +52,7 @@ public class AuthTokenDAO {
       statement.setString(1,username);
       rs = statement.executeQuery();
       if (rs.next()) {
-        authToken = new AuthToken(rs.getString("username"),rs.getString("authtoken"));
+        authToken = new AuthToken(rs.getString("authtoken"),rs.getString("username"));
         return authToken;
       }
       else {
@@ -64,16 +64,27 @@ public class AuthTokenDAO {
       throw new DataAccessException("Error encountered while finding token");
     }
   }
-
-  /**
-   * Queries table by the auth token and gets the username of same row
-   * @param authtoken the auth token of logged-in user
-   * @return the username of the user associated with auth token provided
-   * @throws DataAccessException if unable to access data
-   */
-  public String findUsername(String authtoken) throws DataAccessException {
-    return null;
+  public String getUsername(String token) throws DataAccessException {
+    String username;
+    ResultSet rs;
+    String sql = "SELECT * FROM AuthToken WHERE authtoken = ?;";
+    try (PreparedStatement statement = conn.prepareStatement(sql)) {
+      statement.setString(1,token);
+      rs = statement.executeQuery();
+      if (rs.next()) {
+        username = rs.getString("username");
+        return username;
+      }
+      else {
+        return null;
+      }
+    }
+    catch(SQLException e) {
+      e.printStackTrace();
+      throw new DataAccessException("Error encountered while finding username from token");
+    }
   }
+
 
   /**
    * Clears all entries from the token table
@@ -87,6 +98,25 @@ public class AuthTokenDAO {
     catch(SQLException e) {
       e.printStackTrace();
       throw new DataAccessException("Error encountered while clearing the tokens table");
+    }
+  }
+  public boolean realAuthToken(String auth) {
+    boolean exists = true;
+
+    ResultSet results = null;
+    String query = "SELECT * FROM AuthToken WHERE authtoken = ?";
+    try (PreparedStatement stmt = conn.prepareStatement(query)) {
+      stmt.setString(1, auth);
+      results = stmt.executeQuery();
+      exists = results.next();
+      stmt.close();
+      results.close();
+      return exists;
+    }
+    catch (SQLException e) {
+      e.printStackTrace();
+      System.out.println("Whoops, errors bro");
+      return false;
     }
   }
 

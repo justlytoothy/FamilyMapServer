@@ -23,6 +23,8 @@ public class LoadResult {
     this.success = success;
   }
 
+  public LoadResult() {}
+
   public String getMessage() {
     return message;
   }

@@ -25,17 +25,14 @@ public class RegisterHandler implements HttpHandler {
 
   @Override
   public void handle(HttpExchange exchange) throws IOException {
-    boolean success = false;
     try {
       if (exchange.getRequestMethod().toLowerCase().equals("post")) {
-        String url=exchange.getRequestURI().toString().substring(1);
         Gson gson = new Gson();
         String data = readString(exchange.getRequestBody());
         RegisterRequest params = gson.fromJson(data,RegisterRequest.class);
         RegisterService registerService = new RegisterService();
         RegisterResult registerResult = registerService.register(params);
-        success = registerResult.isSuccess();
-        if (success) {
+        if (registerResult.isSuccess()) {
           exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
         }
         else {
@@ -67,9 +64,9 @@ public class RegisterHandler implements HttpHandler {
     }
     return sb.toString();
   }
-  private void writeString(String str, OutputStream os) throws IOException {
-    OutputStreamWriter sw = new OutputStreamWriter(os);
-    sw.write(str);
-    sw.flush();
+  private void writeString(String res, OutputStream output) throws IOException {
+    OutputStreamWriter write = new OutputStreamWriter(output);
+    write.write(res);
+    write.flush();
   }
 }

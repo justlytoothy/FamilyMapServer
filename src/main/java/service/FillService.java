@@ -29,25 +29,15 @@ public class FillService {
       generator = new Generator();
   }
 
-  /**
-   * Fills 4 generations of ancestor data for the currently logged-in user
-   * @param username the username of the logged-in user
-   * @return the result of filling in 4 generations of ancestor data
-   */
-  public FillResult fill (String username) {
-    System.out.println("In fill service username");
 
-    return null;
-  }
 
   /**
-   * Used when user provides the number of generations to fill,
+   * Used to fill user,
    * fills that many generations of ancestor data for the logged-in user
    * @param params the parsed params array from handler
    * @return the results of filling in generations for the user
    */
   public FillResult fill (String params []) {
-    System.out.println("In fill service username and gen");
     FillResult result = new FillResult();
     int generations = DEFAULT_GENERATIONS;
     if (params.length == 3) {
@@ -101,7 +91,7 @@ public class FillService {
       Generator.Location marriageLocation = generator.getRandomLocation();
       makeParents(database,currentPerson,marriageLocation,generations);
       result.setSuccess(true);
-      result.setMessage("Successfully added " + peopleAdded + " people and " + eventsAdded + " events to the database!");
+      result.setMessage("Successfully added " + peopleAdded + " persons and " + eventsAdded + " events to the database!");
       database.closeConnection(true);
     }
     catch(DataAccessException| SQLException e) {

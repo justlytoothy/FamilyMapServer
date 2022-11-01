@@ -103,6 +103,12 @@ public class Database {
         token = token.substring(0,8) + date.getTime();
         return token;
     }
+    public void clearDatabase() throws DataAccessException {
+        userDAO.clear();
+        personDAO.clear();
+        eventDAO.clear();
+        authTokenDAO.clear();
+    }
 
 
     public UserDAO getUserDAO() {

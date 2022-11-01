@@ -35,6 +35,11 @@ public class LoginResult {
   }
 
   /**
+   * Empty constructor for utility
+   */
+  public LoginResult () {}
+
+  /**
    * The constructor used for a successful response
    * @param authtoken the generated authorization token
    * @param username the username

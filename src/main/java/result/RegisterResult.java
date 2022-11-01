@@ -52,6 +52,11 @@ public class RegisterResult {
     this.success = success;
     this.message = null;
   }
+
+  /**
+   * Build from the login result after registering
+   * @param result
+   */
   public RegisterResult(LoginResult result) {
     authtoken = result.getAuthToken();
     username = result.getUsername();

@@ -5,6 +5,7 @@ import model.Person;
 import model.User;
 
 import java.sql.*;
+import java.util.ArrayList;
 
 /**
  * The data access object for the event table
@@ -95,18 +96,9 @@ public class EventDAO {
         }
     }
 
-    /**
-     * Gets the user associated with the event identified by provided event ID
-     * @param eventID the ID associated with the event
-     * @return the user object found or null
-     * @throws DataAccessException if unable to access data
-     */
-    public User getUser(String eventID) throws DataAccessException {
-        return null;
-    }
-    public void deleteByUsername(String username) {
+    public void deleteByUsername(String username) throws DataAccessException {
         PreparedStatement stmt = null;
-        String delete = "DELETE FROM Event WHERE AssociatedUsername = ?";
+        String delete = "DELETE FROM Event WHERE associatedUsername = ?";
         try {
             stmt = conn.prepareStatement(delete);
             stmt.setString(1, username);
@@ -114,7 +106,61 @@ public class EventDAO {
             stmt.close();
         }
         catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
+            throw new DataAccessException("Error while deleting events by username :(");
         }
+    }
+    public boolean doesEventIDExist(String eventID) {
+        boolean exists = true;
+
+        PreparedStatement stmt = null;
+        ResultSet results = null;
+        String query = "SELECT * FROM Event WHERE eventID = ?";
+        try {
+            stmt = conn.prepareStatement(query);
+            stmt.setString(1, eventID);
+            results = stmt.executeQuery();
+            exists = results.next();
+            stmt.close();
+            results.close();
+            return exists;
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Dang it we got problems");
+            return false;
+        }
+    }
+
+    /**
+     * Finds all the family members of the provided person object
+     * @param username the username string to find family
+     * @return an array holding person objects of the family members or empty array
+     * @throws DataAccessException if unable to access data
+     */
+    public ArrayList<Event> findFamilyEvents(String username) throws DataAccessException {
+        ArrayList<Event> familyEvents = new ArrayList<>();
+        ResultSet rs;
+        String sql = "SELECT * FROM Event WHERE associatedUsername = ?;";
+        try (PreparedStatement statement = conn.prepareStatement(sql)) {
+            statement.setString(1,username);
+            rs = statement.executeQuery();
+            while (rs.next()) {
+                Event event = new Event(rs.getString("eventID"),rs.getString("associatedUsername"),
+                        rs.getString("personID"),rs.getFloat("latitude"),
+                        rs.getFloat("longitude"), rs.getString("country"),
+                        rs.getString("city"), rs.getString("eventType"), rs.getInt("year"));
+                familyEvents.add(event);
+            }
+            statement.close();
+            rs.close();
+            return familyEvents;
+
+        }
+        catch(SQLException e) {
+            e.printStackTrace();
+            throw new DataAccessException("Error encountered while finding family events");
+        }
+
     }
 }

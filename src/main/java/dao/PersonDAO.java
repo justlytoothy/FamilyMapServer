@@ -5,6 +5,7 @@ import model.Event;
 import model.User;
 
 import java.sql.*;
+import java.util.ArrayList;
 
 /**
  * The data access object for the person table
@@ -26,7 +27,7 @@ public class PersonDAO {
 
     PreparedStatement stmt = null;
     ResultSet results = null;
-    String query = "SELECT * FROM Person WHERE PersonID = ?";
+    String query = "SELECT * FROM Person WHERE personID = ?";
     try {
       stmt = conn.prepareStatement(query);
       stmt.setString(1, personID);
@@ -65,10 +66,6 @@ public class PersonDAO {
     }
     catch(SQLException e) {
       e.printStackTrace();
-      System.out.println(person.getFirstName());
-      System.out.println(person.getLastName());
-      System.out.println(person.getPersonID());
-      System.out.println("Next Person");
       throw new DataAccessException("Error encountered while inserting into the person table");
     }
   }
@@ -120,25 +117,39 @@ public class PersonDAO {
 
   /**
    * Finds all the family members of the provided person object
-   * @param person the person object on which to find family
+   * @param username the username string to find family
    * @return an array holding person objects of the family members or empty array
    * @throws DataAccessException if unable to access data
    */
-  public Person[] findFamily(Person person) throws DataAccessException {
-    return null;
+  public ArrayList<Person> findFamily(String username) throws DataAccessException {
+    ArrayList<Person> family = new ArrayList<>();
+    ResultSet rs;
+    String sql = "SELECT * FROM Person WHERE associatedUsername = ?;";
+    try (PreparedStatement statement = conn.prepareStatement(sql)) {
+      statement.setString(1,username);
+      rs = statement.executeQuery();
+      while (rs.next()) {
+        Person person = new Person(rs.getString("associatedUsername"),rs.getString("personID"),
+                rs.getString("firstName"),rs.getString("lastName"),
+                rs.getString("gender"), rs.getString("fatherID"),
+                rs.getString("motherID"), rs.getString("spouseID"));
+        family.add(person);
+      }
+      statement.close();
+      rs.close();
+      return family;
+
+    }
+    catch(SQLException e) {
+      e.printStackTrace();
+      throw new DataAccessException("Error encountered while finding family");
+    }
+
   }
-  /**
-   * Finds all the events associated with the provided person object
-   * @param person the person object on which to find events
-   * @return an array holding event objects or empty array
-   * @throws DataAccessException if unable to access data
-   */
-  public Event[] findEvents(Person person) throws DataAccessException {
-    return null;
-  }
-  public void deleteByUsername(String username) {
+
+  public void deleteByUsername(String username) throws DataAccessException {
     PreparedStatement stmt = null;
-    String delete = "DELETE FROM Person WHERE AssociatedUsername = ?";
+    String delete = "DELETE FROM Person WHERE associatedUsername = ?";
     try {
       stmt = conn.prepareStatement(delete);
       stmt.setString(1, username);
@@ -146,7 +157,8 @@ public class PersonDAO {
       stmt.close();
     }
     catch (SQLException e) {
-      System.out.println(e.getMessage());
+      e.printStackTrace();
+      throw new DataAccessException("Error while deleting by username");
     }
   }
 

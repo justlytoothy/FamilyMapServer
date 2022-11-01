@@ -4,6 +4,7 @@ import java.io.*;
 import java.net.*;
 import java.io.File;
 import java.nio.file.Files;
+import java.nio.file.Path;
 
 import com.sun.net.httpserver.*;
 
@@ -32,7 +33,7 @@ public class FileHandler implements HttpHandler {
       // state of the server).
       if (exchange.getRequestMethod().toLowerCase().equals("get")) {
         String uri = exchange.getRequestURI().toString();
-        if (uri == null || uri.equals("/")) {
+        if (uri == null || uri.equals("/") || uri.equals("/index.html")) {
           uri = "/index.html";
         }
         String filePath = "web" + uri;
@@ -44,8 +45,11 @@ public class FileHandler implements HttpHandler {
           out.close();
         }
         else {
+          File errorPage = new File("web" + "/HTML/404.html");
           exchange.sendResponseHeaders(HttpURLConnection.HTTP_NOT_FOUND, 0);
-          exchange.getResponseBody().close();
+          OutputStream out = exchange.getResponseBody();
+          Files.copy(errorPage.toPath(),out);
+          out.close();
         }
       }
 

@@ -22,11 +22,10 @@ public class FillHandler implements HttpHandler {
       if (exchange.getRequestMethod().toLowerCase().equals("post")) {
         String url=exchange.getRequestURI().toString().substring(1);
         String[] params=url.split("/");
-        FillService fillService=new FillService();
-        FillResult fillResult=fillService.fill(params);
+        FillService fillService = new FillService();
+        FillResult fillResult = fillService.fill(params);
         Gson gson = new Gson();
-        success=fillResult.isSuccess();
-        if (success) {
+        if (fillResult.isSuccess()) {
           exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
         }
         else {
@@ -44,10 +43,10 @@ public class FillHandler implements HttpHandler {
       e.printStackTrace();
     }
   }
-  private void writeString(String str, OutputStream os) throws IOException {
-    OutputStreamWriter sw = new OutputStreamWriter(os);
-    sw.write(str);
-    sw.flush();
+  private void writeString(String res, OutputStream output) throws IOException {
+    OutputStreamWriter write = new OutputStreamWriter(output);
+    write.write(res);
+    write.flush();
   }
 
 }

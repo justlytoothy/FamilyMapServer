@@ -31,6 +31,7 @@ public class RegisterService {
     UserDAO userDAO = database.getUserDAO();
 
     if (userDAO.userExists(request.getUsername())) {
+      System.out.println("you already exist");
       result.setMessage("error: Username already in use, try again :(");
       database.closeConnection(false);
       return result;

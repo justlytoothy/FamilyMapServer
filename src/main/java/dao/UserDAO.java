@@ -90,21 +90,45 @@ public class UserDAO {
   }
 
   /**
-   * Finds the person associated with the given user
-   * @param user
-   * @return the found person object
-   * @throws DataAccessException if unable to access data
+   * Gets password based on username to login
+   * @param username
+   * @return
    */
-  public Person getPerson(User user) throws DataAccessException {return null;}
+  public String getPassword(String username) throws DataAccessException {
+    String password;
 
-  /**
-   * Finds all the events associated with the provided user object
-   * @param user the user object on which to find events
-   * @return an array holding event objects or empty array
-   * @throws DataAccessException if unable to access data
-   */
-  public Event[] findEvents(User user) throws DataAccessException {
-    return null;
+    ResultSet results = null;
+    String sql = "SELECT * FROM User WHERE username = ?";
+    try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+      stmt.setString(1, username);
+      results = stmt.executeQuery();
+      password = results.getString("password");
+      stmt.close();
+      results.close();
+      return password;
+    }
+    catch (SQLException e) {
+      e.printStackTrace();
+      throw new DataAccessException("Error while looking for password :(");
+    }
+  }
+  public String getPersonID(String username) throws DataAccessException {
+    String personID;
+
+    ResultSet results = null;
+    String sql = "SELECT * FROM User WHERE username = ?";
+    try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+      stmt.setString(1, username);
+      results = stmt.executeQuery();
+      personID = results.getString("personID");
+      stmt.close();
+      results.close();
+      return personID;
+    }
+    catch (SQLException e) {
+      e.printStackTrace();
+      throw new DataAccessException("Error while getting PersonID");
+    }
   }
   /**
    * Checks to see if a certain username already exists in the database
@@ -114,11 +138,9 @@ public class UserDAO {
   public boolean userExists(String username) {
     boolean exists = true;
 
-    PreparedStatement stmt = null;
     ResultSet results = null;
-    String query = "SELECT * FROM User WHERE Username = ?";
-    try {
-      stmt = conn.prepareStatement(query);
+    String query = "SELECT * FROM User WHERE username = ?";
+    try (PreparedStatement stmt = conn.prepareStatement(query)) {
       stmt.setString(1, username);
       results = stmt.executeQuery();
       exists = results.next();
@@ -129,7 +151,7 @@ public class UserDAO {
     catch (SQLException e) {
       e.printStackTrace();
       System.out.println("Whoops, errors bro");
-      return false;  // check to see if it actually worked
+      return false;
     }
   }
 
