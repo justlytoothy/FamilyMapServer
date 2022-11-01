@@ -34,6 +34,9 @@ public class RegisterResult {
     this.message = message;
     this.success = success;
   }
+  public RegisterResult() {
+    success = false;
+  }
 
   /**
    * The constructor used for a successful response
@@ -48,6 +51,12 @@ public class RegisterResult {
     this.personID = personID;
     this.success = success;
     this.message = null;
+  }
+  public RegisterResult(LoginResult result) {
+    authtoken = result.getAuthToken();
+    username = result.getUsername();
+    personID = result.getPersonID();
+    success = result.isSuccess();
   }
 
   public String getAuthtoken() {

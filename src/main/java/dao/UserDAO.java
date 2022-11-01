@@ -106,6 +106,32 @@ public class UserDAO {
   public Event[] findEvents(User user) throws DataAccessException {
     return null;
   }
+  /**
+   * Checks to see if a certain username already exists in the database
+   * @param username username to check in the table
+   * @return true or false
+   */
+  public boolean userExists(String username) {
+    boolean exists = true;
+
+    PreparedStatement stmt = null;
+    ResultSet results = null;
+    String query = "SELECT * FROM User WHERE Username = ?";
+    try {
+      stmt = conn.prepareStatement(query);
+      stmt.setString(1, username);
+      results = stmt.executeQuery();
+      exists = results.next();
+      stmt.close();
+      results.close();
+      return exists;
+    }
+    catch (SQLException e) {
+      e.printStackTrace();
+      System.out.println("Whoops, errors bro");
+      return false;  // check to see if it actually worked
+    }
+  }
 
 
 

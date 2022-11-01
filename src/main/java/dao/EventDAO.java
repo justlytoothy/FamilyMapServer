@@ -1,6 +1,7 @@
 package dao;
 
 import model.Event;
+import model.Person;
 import model.User;
 
 import java.sql.*;
@@ -22,76 +23,75 @@ public class EventDAO {
     }
 
     /**
-     * Takes in an object of event class and inserts all the fields into a new row in the table
+     * Takes in an object of event class and inserts all of the fields into a new row in the table
      * @param event the event to be added
      * @throws DataAccessException if unable to access data
      */
     public void insert(Event event) throws DataAccessException {
-        //We can structure our string to be similar to a sql command, but if we insert question
-        //marks we can change them later with help from the statement
-        String sql = "INSERT INTO Event (EventID, AssociatedUsername, PersonID, Latitude, Longitude, " +
-                "Country, City, EventType, Year) VALUES(?,?,?,?,?,?,?,?,?)";
-        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-            //Using the statements built-in set(type) functions we can pick the question mark we want
-            //to fill in and give it a proper value. The first argument corresponds to the first
-            //question mark found in our sql String
-            stmt.setString(1, event.getEventID());
-            stmt.setString(2, event.getAssociatedUsername());
-            stmt.setString(3, event.getPersonID());
-            stmt.setFloat(4, event.getLatitude());
-            stmt.setFloat(5, event.getLongitude());
-            stmt.setString(6, event.getCountry());
-            stmt.setString(7, event.getCity());
-            stmt.setString(8, event.getEventType());
-            stmt.setInt(9, event.getYear());
+        String sql = "INSERT INTO Event (eventID, associatedUsername, personID, latitude, longitude, " +
+                "country, city, eventType,year) VALUES(?,?,?,?,?,?,?,?,?)";
+        try (PreparedStatement statement = conn.prepareStatement(sql)) {
+            statement.setString(1,event.getEventID());
+            statement.setString(2,event.getAssociatedUsername());
+            statement.setString(3,event.getPersonID());
+            statement.setFloat(4,event.getLatitude());
+            statement.setFloat(5,event.getLongitude());
+            statement.setString(6,event.getCountry());
+            statement.setString(7,event.getCity());
+            statement.setString(8,event.getEventType());
+            statement.setInt(9,event.getYear());
 
-            stmt.executeUpdate();
-        } catch (SQLException e) {
+
+            statement.executeUpdate();
+        }
+        catch(SQLException e) {
             e.printStackTrace();
-            throw new DataAccessException("Error encountered while inserting an event into the database");
+            throw new DataAccessException("Error encountered while inserting into the event table");
         }
     }
 
     /**
-     * Takes in an event ID and returns the matching row from the database
-     * @param eventID the ID of the desired event
-     * @return the found event or null if not found
+     * Takes in a event ID and returns the matching row from the database
+     * @param eventID the ID of the event to be found
+     * @return the found event
      * @throws DataAccessException if unable to access data
      */
     public Event find(String eventID) throws DataAccessException {
         Event event;
         ResultSet rs;
-        String sql = "SELECT * FROM Event WHERE EventID = ?;";
-        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setString(1, eventID);
-            rs = stmt.executeQuery();
+        String sql = "SELECT * FROM Event WHERE eventID = ?;";
+        try (PreparedStatement statement = conn.prepareStatement(sql)) {
+            statement.setString(1,eventID);
+            rs = statement.executeQuery();
             if (rs.next()) {
-                event = new Event(rs.getString("EventID"), rs.getString("AssociatedUsername"),
-                        rs.getString("PersonID"), rs.getFloat("Latitude"), rs.getFloat("Longitude"),
-                        rs.getString("Country"), rs.getString("City"), rs.getString("EventType"),
-                        rs.getInt("Year"));
+                event = new Event(rs.getString("eventID"),rs.getString("associatedUsername"),
+                        rs.getString("personID"),rs.getFloat("latitude"),
+                        rs.getFloat("longitude"), rs.getString("country"),
+                        rs.getString("city"), rs.getString("eventType"), rs.getInt("year"));
                 return event;
-            } else {
+            }
+            else {
                 return null;
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            throw new DataAccessException("Error encountered while finding an event in the database");
         }
-
+        catch(SQLException e) {
+            e.printStackTrace();
+            throw new DataAccessException("Error encountered while finding event");
+        }
     }
 
     /**
      * Clears all entries from the events table
-     * @throws DataAccessException if unable to access data
+     * @throws DataAccessException
      */
     public void clear() throws DataAccessException {
         String sql = "DELETE FROM Event";
-        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.executeUpdate();
-        } catch (SQLException e) {
+        try (PreparedStatement statement = conn.prepareStatement(sql)) {
+            statement.executeUpdate();
+        }
+        catch(SQLException e) {
             e.printStackTrace();
-            throw new DataAccessException("Error encountered while clearing the event table");
+            throw new DataAccessException("Error encountered while clearing the events table");
         }
     }
 
@@ -103,5 +103,18 @@ public class EventDAO {
      */
     public User getUser(String eventID) throws DataAccessException {
         return null;
+    }
+    public void deleteByUsername(String username) {
+        PreparedStatement stmt = null;
+        String delete = "DELETE FROM Event WHERE AssociatedUsername = ?";
+        try {
+            stmt = conn.prepareStatement(delete);
+            stmt.setString(1, username);
+            stmt.executeUpdate();
+            stmt.close();
+        }
+        catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
     }
 }

@@ -1,5 +1,7 @@
 package model;
 
+import request.RegisterRequest;
+
 import java.util.Objects;
 
 /**
@@ -53,6 +55,15 @@ public class User {
     this.lastName = lastName;
     this.gender = gender;
     this.personID = personID;
+  }
+  public User(RegisterRequest request, String persID) {
+    username = request.getUsername();
+    password = request.getPassword();
+    email = request.getEmail();
+    firstName = request.getFirstName();
+    lastName = request.getLastName();
+    gender = request.getGender();
+    personID = persID;
   }
 
   public String getUsername() {

@@ -1,6 +1,7 @@
 package dao;
 
 import model.AuthToken;
+import model.Event;
 
 import java.sql.*;
 
@@ -24,7 +25,18 @@ public class AuthTokenDAO {
    * @param token
    * @throws DataAccessException if unable to access data
    */
-  public void insert(AuthToken token) throws DataAccessException {}
+  public void insert(AuthToken token) throws DataAccessException {
+    String sql = "INSERT INTO AuthToken (authtoken, username) VALUES(?,?)";
+    try (PreparedStatement statement = conn.prepareStatement(sql)) {
+      statement.setString(1, token.getUsername());
+      statement.setString(2, token.getAuthToken());
+      statement.executeUpdate();
+    }
+    catch(SQLException e) {
+      e.printStackTrace();
+      throw new DataAccessException("Error encountered while inserting into the token table");
+    }
+  }
 
   /**
    * Takes in a username and returns the matching row from the database
@@ -33,7 +45,24 @@ public class AuthTokenDAO {
    * @throws DataAccessException if unable to access data
    */
   public AuthToken find(String username) throws DataAccessException {
-    return null;
+    AuthToken authToken;
+    ResultSet rs;
+    String sql = "SELECT * FROM AuthToken WHERE username = ?;";
+    try (PreparedStatement statement = conn.prepareStatement(sql)) {
+      statement.setString(1,username);
+      rs = statement.executeQuery();
+      if (rs.next()) {
+        authToken = new AuthToken(rs.getString("username"),rs.getString("authtoken"));
+        return authToken;
+      }
+      else {
+        return null;
+      }
+    }
+    catch(SQLException e) {
+      e.printStackTrace();
+      throw new DataAccessException("Error encountered while finding token");
+    }
   }
 
   /**
@@ -50,6 +79,15 @@ public class AuthTokenDAO {
    * Clears all entries from the token table
    * @throws DataAccessException if unable to access data
    */
-  public void clear() throws DataAccessException {}
+  public void clear() throws DataAccessException {
+    String sql = "DELETE FROM AuthToken";
+    try (PreparedStatement statement = conn.prepareStatement(sql)) {
+      statement.executeUpdate();
+    }
+    catch(SQLException e) {
+      e.printStackTrace();
+      throw new DataAccessException("Error encountered while clearing the tokens table");
+    }
+  }
 
 }

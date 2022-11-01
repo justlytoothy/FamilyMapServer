@@ -4,12 +4,32 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Date;
+import static java.util.UUID.randomUUID;
 
 /**
  * The database connection class
  */
 public class Database {
     private Connection conn;
+    private UserDAO userDAO;
+    private EventDAO eventDAO;
+    private PersonDAO personDAO;
+    private AuthTokenDAO authTokenDAO;
+    public Database() {
+        try {
+            if (conn == null) {
+                openConnection();
+            }
+            userDAO = new UserDAO(conn);
+            eventDAO = new EventDAO(conn);
+            personDAO = new PersonDAO(conn);
+            authTokenDAO = new AuthTokenDAO(conn);
+        }
+        catch(DataAccessException e) {
+            e.printStackTrace();
+        }
+    }
 
     // Whenever we want to make a change to our database we will have to open a connection and use
     // Statements created by that connection to initiate transactions
@@ -19,7 +39,7 @@ public class Database {
      * @return the new connection
      * @throws DataAccessException if unable to connect
      */
-    public Connection openConnection() throws DataAccessException {
+    public void openConnection() throws DataAccessException {
         try {
             // The Structure for this Connection is driver:language:path
             // The path assumes you start in the root of your project unless given a full file path
@@ -34,8 +54,6 @@ public class Database {
             e.printStackTrace();
             throw new DataAccessException("Unable to open connection to database");
         }
-
-        return conn;
     }
 
     /**
@@ -45,10 +63,9 @@ public class Database {
      */
     public Connection getConnection() throws DataAccessException {
         if (conn == null) {
-            return openConnection();
-        } else {
-            return conn;
+            openConnection();
         }
+        return conn;
     }
 
     // When we are done manipulating the database it is important to close the connection. This will
@@ -80,7 +97,28 @@ public class Database {
             e.printStackTrace();
         }
     }
+    public String genToken() {
+        String token = randomUUID().toString();
+        Date date = new Date();
+        token = token.substring(0,8) + date.getTime();
+        return token;
+    }
 
 
+    public UserDAO getUserDAO() {
+        return userDAO;
+    }
+
+    public EventDAO getEventDAO() {
+        return eventDAO;
+    }
+
+    public PersonDAO getPersonDAO() {
+        return personDAO;
+    }
+
+    public AuthTokenDAO getAuthTokenDAO() {
+        return authTokenDAO;
+    }
 }
 

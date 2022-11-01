@@ -23,6 +23,9 @@ public class FillResult {
     this.message = message;
     this.success = success;
   }
+  public FillResult() {
+
+  }
 
   public String getMessage() {
     return message;
