@@ -1,5 +1,7 @@
 package request;
 
+import model.User;
+
 /**
  * The request to register a new user
  */
@@ -45,6 +47,14 @@ public class RegisterRequest {
     this.firstName=firstName;
     this.lastName=lastName;
     this.gender=gender;
+  }
+  public RegisterRequest(User user) {
+    this.username=user.getUsername();
+    this.password=user.getPassword();
+    this.email=user.getEmail();
+    this.firstName=user.getFirstName();
+    this.lastName=user.getLastName();
+    this.gender=user.getGender();
   }
 
   public String getUsername() {

@@ -61,7 +61,7 @@ public class FillService {
       return result;
     }
     Database database = new Database();
-    UserDAO userDAO =database.getUserDAO();
+    UserDAO userDAO = database.getUserDAO();
 
     String username = params[1];
     if (!userDAO.userExists(username)) {
@@ -130,6 +130,7 @@ public class FillService {
     }
     catch(DataAccessException e) {
       e.printStackTrace();
+      throw new SQLException();
     }
   }
 
