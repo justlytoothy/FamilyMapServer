@@ -96,11 +96,12 @@ public class UserDAO {
    */
   public String getPassword(String username) throws DataAccessException {
     String password;
-
     ResultSet results = null;
     String sql = "SELECT * FROM User WHERE username = ?";
     try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+      System.out.println(username);
       stmt.setString(1, username);
+      System.out.println(stmt.toString());
       results = stmt.executeQuery();
       password = results.getString("password");
       stmt.close();
@@ -120,6 +121,7 @@ public class UserDAO {
     try (PreparedStatement stmt = conn.prepareStatement(sql)) {
       stmt.setString(1, username);
       results = stmt.executeQuery();
+      System.out.println("here");
       personID = results.getString("personID");
       stmt.close();
       results.close();
