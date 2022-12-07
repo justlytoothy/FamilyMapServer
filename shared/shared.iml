@@ -4,8 +4,8 @@
     <option name="activeLocationsIds" />
   </component>
   <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_8">
-    <output url="file://$MODULE_DIR$/production" />
-    <output-test url="file://$MODULE_DIR$/test" />
+    <output url="file://$MODULE_DIR$/../target/out/production/shared" />
+    <output-test url="file://$MODULE_DIR$/../target/out/test/shared" />
     <exclude-output />
     <content url="file://$MODULE_DIR$">
       <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
