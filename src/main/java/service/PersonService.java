@@ -22,6 +22,7 @@ public class PersonService {
             return personResult;
         }
     }
+
     public PersonResult getOnePerson(String auth, String params []) {
         PersonResult personResult;
         String ID = params[1];
