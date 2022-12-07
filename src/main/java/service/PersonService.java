@@ -1,10 +1,8 @@
 package service;
 
-import dao.AuthTokenDAO;
-import dao.DataAccessException;
-import dao.Database;
-import dao.PersonDAO;
+import dao.*;
 import model.Person;
+import model.User;
 import result.PersonResult;
 
 import java.util.ArrayList;
@@ -64,6 +62,7 @@ public class PersonService {
         PersonResult personResult;
         Database database = new Database();
         PersonDAO personDAO = database.getPersonDAO();
+        UserDAO userDAO = database.getUserDAO();
         AuthTokenDAO authTokenDAO = database.getAuthTokenDAO();
         if (!authTokenDAO.realAuthToken(auth)) {
             personResult = new PersonResult("Error, Incorrect auth token",false);
@@ -71,8 +70,12 @@ public class PersonService {
             return personResult;
         }
         try {
-            ArrayList<Person> family = personDAO.findFamily(authTokenDAO.getUsername(auth));
             personResult = new PersonResult();
+            String username = authTokenDAO.getUsername(auth);
+            ArrayList<Person> family = personDAO.findFamily(username);
+            User user = userDAO.findUser(username);
+            Person actualPerson = personDAO.find(user.getPersonID());
+            personResult = new PersonResult(actualPerson);
             personResult.setData(family);
             personResult.setSuccess(true);
             database.closeConnection(true);
@@ -87,3 +90,4 @@ public class PersonService {
 
     }
 }
+

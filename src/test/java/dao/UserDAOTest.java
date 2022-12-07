@@ -75,7 +75,7 @@ class UserDAOTest {
     @Test
     @DisplayName("Get Password Neg")
     void getPasswordNeg() throws DataAccessException {
-        assertThrows(DataAccessException.class,()->userDAO.getPassword("test"));
+        assertNull(userDAO.getPassword("test"));
     }
 
     @Test
@@ -87,7 +87,7 @@ class UserDAOTest {
     @Test
     @DisplayName("Get PersonID Neg")
     void getPersonIDNeg() throws DataAccessException {
-        assertThrows(DataAccessException.class,()->userDAO.getPersonID("test"));
+        assertNull(userDAO.getPersonID("test"));
     }
 
     @Test
